@@ -1,0 +1,75 @@
+Table Student {
+  student_id integer [primary key]
+  fornamn varchar [not null]
+  efternamn varchar [not null]
+  email varchar [unique, not null]
+  klass_id integer [ref: > Klass.klass_id, not null]
+}
+
+Table Student_Kansligt {
+  student_id integer [primary key, ref: - Student.student_id]
+  personnummer varchar [unique, not null]
+}
+
+Table Utbildningsledare {
+  ul_id integer [primary key]
+  fornamn varchar [not null]
+  efternamn varchar [not null]
+  email varchar [unique, not null]
+}
+
+Table UL_Kansligt {
+  ul_id integer [primary key, ref: - Utbildningsledare.ul_id]
+  personnummer varchar [unique, not null]
+}
+
+Table Program {
+  program_id integer [primary key]
+  namn varchar [not null]
+}
+
+Table Klass {
+  klass_id integer [primary key]
+  namn varchar [not null]
+  program_id integer [ref: > Program.program_id, not null]
+  utbildningsledare_id integer [ref: > Utbildningsledare.ul_id, not null]
+}
+
+Table Kurs {
+  kurs_id integer [primary key]
+  kurskod varchar [unique, not null]
+  namn varchar [not null]
+  poang integer [not null]
+  beskrivning text
+}
+
+Table Klass_Kurs {
+  klass_id integer [ref: > Klass.klass_id, not null]
+  kurs_id integer [ref: > Kurs.kurs_id, not null]
+  utbildare_id integer [ref: > Utbildare.utbildare_id, not null]
+  
+  indexes {
+    (klass_id, kurs_id) [pk]
+  }
+}
+
+Table Utbildare {
+  utbildare_id integer [primary key]
+  fornamn varchar [not null]
+  efternamn varchar [not null]
+  email varchar [unique, not null]
+}
+
+Table Konsult {
+  utbildare_id integer [primary key, ref: - Utbildare.utbildare_id]
+  foretag_id integer [ref: > Foretag.foretag_id, not null]
+  timarvode_sek float [not null] 
+}
+
+Table Foretag {
+  foretag_id integer [primary key]
+  namn varchar [not null]
+  organisationsnummer varchar [unique, not null]
+  har_f_skatt boolean [not null]
+  adress varchar [not null]
+}
